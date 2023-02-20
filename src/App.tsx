@@ -1,4 +1,6 @@
+import { Key } from 'react';
 import Button from './components/Button';
+import DropDownTypes from './components/DropDownTypes';
 import Navbar from './components/Navbar';
 import Pokemon from './components/Pokemon';
 import { CounterProvider, useCounter } from './context/Counter';
@@ -7,59 +9,58 @@ import useFetch from './hooks/useFetch';
 import { twStyles } from './styles/styles';
 
 function App() {
-  // const { status, data, error } = useAxios<any>(
-  //   'https://random-data-api.com/api/v2/users',
-  //   {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: 'Bearer TOKEN_HERE',
-  //     },
-  //     params: {
-  //       param1: 'value1',
-  //       param2: 'value2',
-  //     },
-  //   }
-  // );
-  // const { status, data, error } = useFetch<any>(
-  //   'https://random-data-api.com/api/v2/users'
-  // );
+  const { status, data, error } = useAxios<any>(
+    'https://pokeapi.co/api/v2/pokemon?limit=10&offset=0',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
-  // function handleClick() {
-  //   console.log('Button clicked!');
-  // }
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
 
-  // if (status === 'loading') {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (status === 'error') {
-  //   return <p>{error?.message || 'An error occurred'}</p>;
-  // }
-  // console.log(data);
+  if (status === 'error') {
+    return <p>{error?.message || 'An error occurred'}</p>;
+  }
   return (
-    <>
+    <div>
       <Navbar />
 
-      <main>
-        <div>
-          <input placeholder="search" />
-        
+      <main className={`${twStyles.flexCenter}  h-screen`}>
+        <div className="flex flex-col gap-5 mr-14">
+          <div className="flex flex-col">
+            <label
+              htmlFor="search"
+              className="text-lg font-medium text-gray-700"
+            >
+              Filters
+            </label>
+            <input placeholder="search" />
+          </div>
+          <DropDownTypes label="Pokemon Types" />
           <div>
             <input type="checkbox" />
             <span>Show only caught Pokemon</span>
           </div>
         </div>
-        <div>
-          <span>Name</span>
-          <span>Type</span>
-          <span>Status</span>
-        </div>
-        <div>
-          <Pokemon />
+        <div className="flex flex-col gap-5">
+          <div className="flex gap-5">
+            <span>Name</span>
+            <span>Type</span>
+            <span>Status</span>
+          </div>
+          <div>
+            {data?.results.map((pokemon: any, i: Key) => (
+              <Pokemon name={pokemon.name} url={pokemon.url} key={i} />
+            ))}
+          </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

@@ -2,9 +2,9 @@ import React from 'react';
 
 interface Props {
   label: string;
-  optionsEndpoint: string;
+  optionsEndpoint?: string;
   value?: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 
 function DropDownTypes({ label, optionsEndpoint, value, onChange }: Props) {
