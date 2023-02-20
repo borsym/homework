@@ -1,4 +1,6 @@
 import React from 'react';
+import useAxios from '../hooks/useAxios';
+import { POKE_API } from '../utils/constants';
 
 interface Props {
   label: string;
@@ -8,6 +10,20 @@ interface Props {
 }
 
 function DropDownTypes({ label, optionsEndpoint, value, onChange }: Props) {
+  const { status, data, error } = useAxios<any>(`${POKE_API}type`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+
+  if (status === 'error') {
+    return <p>{error?.message || 'An error occurred'}</p>;
+  }
+
   return (
     <div>
       <label htmlFor={label} className="text-lg font-medium text-gray-700">

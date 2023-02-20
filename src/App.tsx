@@ -5,12 +5,12 @@ import Navbar from './components/Navbar';
 import Pokemon from './components/Pokemon';
 import { CounterProvider, useCounter } from './context/Counter';
 import useAxios from './hooks/useAxios';
-import useFetch from './hooks/useFetch';
 import { twStyles } from './styles/styles';
+import { POKE_API } from './utils/constants';
 
 function App() {
   const { status, data, error } = useAxios<any>(
-    'https://pokeapi.co/api/v2/pokemon?limit=10&offset=0',
+    `${POKE_API}pokemon?limit=10&offset=0`,
     {
       method: 'GET',
       headers: {
