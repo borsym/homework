@@ -4,41 +4,47 @@ import { twStyles } from '../styles/styles';
 import useAxios from '../hooks/useAxios';
 import { capitalizeFirstLetter } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
-import { options } from '../utils/constants';
+import { OPTIONS } from '../utils/constants';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { catchPokemon, releasePokemon } from '../features/pokemon/pokemonSlice';
+import { PokemonType } from '../utils/Types';
 
 type Props = {
   url: string;
   name: string;
-  caught: boolean;
-  onCaughtChange: (caught: boolean) => void;
   selectedTypes: string[];
 };
 
 function Pokemon(props: Props) {
-  const { url, name, caught, onCaughtChange, selectedTypes } = props;
+  const { url, name, selectedTypes } = props;
+  const pokemons = useAppSelector((state) => state.pokemon.pokemons);
+  const { status, data, error } = useAxios<any>(`${url}`, OPTIONS);
   const navigate = useNavigate();
-  const { status, data, error } = useAxios<any>(`${url}`, options);
+  const dispatch = useAppDispatch();
+  const caught = pokemons[name] || false;
 
   const handleCaughtChange = (caught: boolean) => {
-    onCaughtChange(caught);
+    if (caught) {
+      dispatch(catchPokemon(name));
+    } else {
+      dispatch(releasePokemon(name));
+    }
   };
 
   const handleSelectPokemon = (
     name: string,
-    sprites: any,
+    sprites: string,
     weight: number,
     height: number,
-    abilities: any,
-    caught: boolean
+    abilities: {}[]
   ) => {
     navigate(`/pokemon/${name}`, {
       state: {
         name: name,
-        imageUrl: sprites.other.home.front_default,
+        imageUrl: sprites,
         weight: weight,
         height: height,
         abilities: abilities,
-        caught: caught,
       },
     });
   };
@@ -52,7 +58,7 @@ function Pokemon(props: Props) {
   }
 
   if (selectedTypes.length > 0) {
-    const types = data?.types.map((type: any) => type.type.name);
+    const types = data?.types.map((type: PokemonType) => type.type.name);
     const hasSelectedType = selectedTypes.some((type) => types?.includes(type));
     if (!hasSelectedType) {
       return null;
@@ -70,20 +76,19 @@ function Pokemon(props: Props) {
           onClick={() =>
             handleSelectPokemon(
               name,
-              sprites,
+              sprites.other.home.front_default,
               weight,
               height,
-              abilities,
-              caught
+              abilities
             )
           }
         >
           <span className="max-sm:text-xs">{capitalizeFirstLetter(name)}</span>
           <span className="max-sm:text-xs">
-            {data?.types.map((type: any, i: Key) => (
+            {data?.types.map((type: PokemonType, i: Key) => (
               <span className="max-sm:text-xs" key={i}>
                 {capitalizeFirstLetter(type.type.name)}
-                {i < data.types.length - 1 && ', '}
+                {(i as number) < data.types.length - 1 && ', '}
               </span>
             ))}
           </span>

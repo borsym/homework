@@ -1,15 +1,33 @@
 import MultiSelect from '../components/MultiSelect';
+import {
+  setSearch,
+  setSelectedTypes,
+  setShowOnlyCaught,
+} from '../features/filters/filtersSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 
-type Props = {
-  search: string;
-  setSearch: (search: string) => void;
-  handleShowOnlyCaughtChange: (
+function FilterOptions(props: any) {
+  const dispatch = useAppDispatch();
+
+  const search = useAppSelector((state) => state.filters.search);
+  const showOnlyCaught = useAppSelector(
+    (state) => state.filters.showOnlyCaught
+  );
+
+  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+    dispatch(setSearch(event.target.value));
+  }
+
+  function handleShowOnlyCaughtChange(
     event: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-  setSelectedTypes: (selected: string[] | []) => void;
-};
+  ) {
+    dispatch(setShowOnlyCaught(event.target.checked));
+  }
 
-function FilterOptions(props: Props) {
+  function handleSelectedTypesChange(selected: string[] | []) {
+    dispatch(setSelectedTypes(selected));
+  }
+
   return (
     <>
       <div className="flex flex-col ">
@@ -18,20 +36,23 @@ function FilterOptions(props: Props) {
         </label>
         <input
           placeholder="Search"
-          value={props.search}
-          onChange={(e) => props.setSearch(e.target.value)}
+          value={search}
+          onChange={(e) => handleSearchChange(e)}
           className="border-b border-gray-500 py-2 pr-8 pl-4  focus:outline-none focus:border-blue-500"
         />
       </div>
       <MultiSelect
-        onChange={(selected: string[] | []) => props.setSelectedTypes(selected)}
+        onChange={(selected: string[] | []) =>
+          handleSelectedTypesChange(selected)
+        }
       />
       <div>
         <input
           type="checkbox"
-          onChange={(e) => props.handleShowOnlyCaughtChange(e)}
+          checked={showOnlyCaught}
+          onChange={(e) => handleShowOnlyCaughtChange(e)}
         />
-        <span>Show only caught Pokemon</span>
+        <label>Show only caught Pokemon</label>
       </div>
     </>
   );

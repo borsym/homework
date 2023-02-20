@@ -21,8 +21,8 @@ function useAxios<T>(url: string, options: AxiosRequestConfig): FetchState<T> {
       const response = await axios(url, options);
       setData(response.data);
       setStatus('success');
-    } catch (error: any) {
-      setError(error);
+    } catch (error: unknown) {
+      setError(error as AxiosError<T>);
       setStatus('error');
     }
   };

@@ -2,12 +2,27 @@ import React, { Key } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import { twStyles } from '../styles/styles';
+import { catchPokemon, releasePokemon } from '../features/pokemon/pokemonSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
 
 type Props = {};
 
 function PokemonProfile(props: Props) {
   const location = useLocation();
-  const { name, weight, height, imageUrl, abilities, caught } = location.state;
+  const dispatch = useDispatch();
+
+  const { name, weight, height, imageUrl, abilities } = location.state;
+
+  const pokemons = useSelector((state: RootState) => state.pokemon.pokemons);
+
+  const handleCaughtChange = (name: string, caught: boolean) => {
+    if (caught) {
+      dispatch(catchPokemon(name));
+    } else {
+      dispatch(releasePokemon(name));
+    }
+  };
 
   return (
     <div>
@@ -20,7 +35,7 @@ function PokemonProfile(props: Props) {
           />
           <div
             className={`${
-              !caught ? 'border-blue-500' : 'border-yellow-400'
+              !pokemons[name] ? 'border-blue-500' : 'border-yellow-400'
             } border-2 rounded-lg p-4 mr-4`}
           >
             <img
@@ -61,11 +76,10 @@ function PokemonProfile(props: Props) {
           </table>
           <div className={`${twStyles.flexCenter} mt-4`}>
             <Button
-              label={`${!caught ? 'Catch' : 'Release'}`}
-              onClick={() => {}}
-              disabled={true}
+              label={`${!pokemons[name] ? 'Catch' : 'Release'}`}
+              onClick={() => handleCaughtChange(name, !pokemons[name])}
               className={`${
-                !caught ? twStyles.btn : twStyles.btnRelease
+                !pokemons[name] ? twStyles.btn : twStyles.btnRelease
               } max-sm:min-w-full`}
             />
           </div>

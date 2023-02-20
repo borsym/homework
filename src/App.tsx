@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import { useAppDispatch, useAppSelector } from './hooks/hooks';
 type Props = {};
 
 const Home = lazy(() => import('./pages/Home'));
