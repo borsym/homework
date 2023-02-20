@@ -33,7 +33,8 @@ function Pokemon(props: Props) {
     sprites: any,
     weight: number,
     height: number,
-    abilities: any
+    abilities: any,
+    caught: boolean
   ) => {
     setSelected(data);
     navigate(`/pokemon/${name}`, {
@@ -43,6 +44,7 @@ function Pokemon(props: Props) {
         weight: weight,
         height: height,
         abilities: abilities,
+        caught: caught,
       },
     });
   };
@@ -73,7 +75,14 @@ function Pokemon(props: Props) {
             !caught ? 'border-blue-500' : 'border-yellow-400'
           } border-2 min-w-[300px] flex justify-between items-center p-3 rounded-lg`}
           onClick={() =>
-            handleSelectPokemon(name, sprites, weight, height, abilities)
+            handleSelectPokemon(
+              name,
+              sprites,
+              weight,
+              height,
+              abilities,
+              caught
+            )
           }
         >
           <span className="">{capitalizeFirstLetter(name)}</span>
