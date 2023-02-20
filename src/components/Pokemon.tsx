@@ -1,4 +1,4 @@
-import React, { Key, useState } from 'react';
+import React, { Key } from 'react';
 import Button from './Button';
 import { twStyles } from '../styles/styles';
 import useAxios from '../hooks/useAxios';
@@ -7,10 +7,12 @@ import { capitalizeFirstLetter } from '../utils/helperFunctions';
 type Props = {
   url: String;
   name: String;
+  caught: boolean;
+  onCaughtChange: (caught: boolean) => void;
 };
 
 function Pokemon(props: Props) {
-  const { url, name } = props;
+  const { url, name, caught, onCaughtChange } = props;
   const { status, data, error } = useAxios<any>(`${url}`, {
     method: 'GET',
     headers: {
@@ -18,7 +20,9 @@ function Pokemon(props: Props) {
     },
   });
 
-  const [caught, setCaught] = useState(false);
+  const handleCaughtChange = (caught: boolean) => {
+    onCaughtChange(caught);
+  };
 
   if (status === 'loading') {
     return <p>Loading...</p>;
@@ -46,7 +50,7 @@ function Pokemon(props: Props) {
       <div>
         <Button
           label={`${!caught ? 'Catch' : 'Release'}`}
-          onClick={() => setCaught(!caught)}
+          onClick={() => handleCaughtChange(!caught)}
           className={`${!caught ? twStyles.btn : twStyles.btnRelease}`}
         />
       </div>

@@ -1,12 +1,13 @@
-import { Key } from 'react';
+import { Key, useState } from 'react';
 import Button from './components/Button';
-import DropDownTypes from './components/DropDownTypes';
+import DropDownTypes from './components/MultiSelect';
 import Navbar from './components/Navbar';
 import Pokemon from './components/Pokemon';
 import { CounterProvider, useCounter } from './context/Counter';
 import useAxios from './hooks/useAxios';
 import { twStyles } from './styles/styles';
 import { POKE_API } from './utils/constants';
+import MultiSelect from './components/MultiSelect';
 
 function App() {
   const { status, data, error } = useAxios<any>(
@@ -19,6 +20,23 @@ function App() {
     }
   );
 
+  const [search, setSearch] = useState<string>('');
+  const [pokemonStates, setPokemonStates] = useState<{
+    [name: string]: boolean;
+  }>({});
+  const [showOnlyCaught, setShowOnlyCaught] = useState(false);
+  // const []
+
+  const handleShowOnlyCaughtChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowOnlyCaught(event.target.checked);
+  };
+
+  const handleCaughtChange = (name: string, caught: boolean) => {
+    setPokemonStates({ ...pokemonStates, [name]: caught });
+  };
+
   if (status === 'loading') {
     return <p>Loading...</p>;
   }
@@ -26,10 +44,24 @@ function App() {
   if (status === 'error') {
     return <p>{error?.message || 'An error occurred'}</p>;
   }
+
+  let filteredPokemon = data?.results || [];
+
+  if (showOnlyCaught) {
+    filteredPokemon = filteredPokemon.filter(
+      (pokemon: any) => pokemonStates[pokemon.name]
+    );
+  }
+
+  if (search.length > 0) {
+    filteredPokemon = filteredPokemon.filter((pokemon: any) =>
+      pokemon.name.includes(search)
+    );
+  }
+
   return (
     <div>
       <Navbar />
-
       <main className={`${twStyles.flexCenter}  h-screen`}>
         <div className="flex flex-col gap-5 mr-14">
           <div className="flex flex-col">
@@ -39,11 +71,19 @@ function App() {
             >
               Filters
             </label>
-            <input placeholder="search" />
+            <input
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border-b border-gray-500 py-2 pr-8 pl-4  focus:outline-none focus:border-blue-500"
+            />
           </div>
-          <DropDownTypes label="Pokemon Types" />
+          <MultiSelect />
           <div>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              onChange={(e) => handleShowOnlyCaughtChange(e)}
+            />
             <span>Show only caught Pokemon</span>
           </div>
         </div>
@@ -54,45 +94,24 @@ function App() {
             <span>Status</span>
           </div>
           <div className="flex gap-4 flex-col">
-            {data?.results.map((pokemon: any, i: Key) => (
-              <Pokemon name={pokemon.name} url={pokemon.url} key={i} />
-            ))}
+            {filteredPokemon.map((pokemon: any, i: Key) => {
+              return (
+                <Pokemon
+                  name={pokemon.name}
+                  url={pokemon.url}
+                  key={i}
+                  caught={pokemonStates[pokemon.name]}
+                  onCaughtChange={(caught: boolean) =>
+                    handleCaughtChange(pokemon.name, caught)
+                  }
+                />
+              );
+            })}
           </div>
         </div>
       </main>
     </div>
   );
 }
-
-{
-  /* <div>
-<CounterDisplay />
-<CounterButtons />
-<Button
-  label="Click me!"
-  onClick={handleClick}
-  className={twStyles.btn}
-/>
-</div> */
-}
-// function CounterDisplay() {
-//   const { state } = useCounter();
-
-//   return <div>Count: {state.count}</div>;
-// }
-
-// function CounterButtons() {
-//   const { actions } = useCounter();
-
-//   return (
-//     <div>
-//       <button onClick={actions.increment}>Increment </button>
-//       <button onClick={actions.decrement}>Decrement </button>
-//       <button onClick={() => actions.asyncIncrement(2)}>
-//         Async Increment{' '}
-//       </button>
-//     </div>
-//   );
-// }
 
 export default App;
