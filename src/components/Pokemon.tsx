@@ -4,6 +4,7 @@ import { twStyles } from '../styles/styles';
 import useAxios from '../hooks/useAxios';
 import { capitalizeFirstLetter } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
+import { options } from '../utils/constants';
 
 type Props = {
   url: string;
@@ -16,13 +17,7 @@ type Props = {
 function Pokemon(props: Props) {
   const { url, name, caught, onCaughtChange, selectedTypes } = props;
   const navigate = useNavigate();
-  const { status, data, error } = useAxios<any>(`${url}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const [selected, setSelected] = useState(null);
+  const { status, data, error } = useAxios<any>(`${url}`, options);
 
   const handleCaughtChange = (caught: boolean) => {
     onCaughtChange(caught);
@@ -36,7 +31,6 @@ function Pokemon(props: Props) {
     abilities: any,
     caught: boolean
   ) => {
-    setSelected(data);
     navigate(`/pokemon/${name}`, {
       state: {
         name: name,
