@@ -57,7 +57,7 @@ const MultiSelect: React.FC<Props> = ({ onChange }) => {
     onChange(selectedValues || []);
   };
 
-  if (status === 'loading') {
+  if (status === 'loading' || !data) {
     return <p>Loading...</p>;
   }
 
