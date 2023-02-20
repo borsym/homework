@@ -8,6 +8,11 @@ import FilterOptions from '../components/FilterOptions';
 import { DataResultPokemon } from '../utils/Types';
 const url = `${POKE_API}pokemon?limit=10&offset=0`;
 
+/**Home component that displays a list of Pokemon with filter options
+ * @function Home
+ * @returns {JSX.Element} - The component's rendered content.
+ */
+
 function Home() {
   const { status, data, error } = useAxios<any>(`${url}`, options);
 
