@@ -66,7 +66,6 @@ const MultiSelect: React.FC<Props> = ({ onChange }) => {
   }
 
   let options = data?.results || [];
-  console.log(options);
 
   options = options.map((option: any) => ({
     value: option.name,

@@ -3,19 +3,13 @@ import Navbar from '../components/Navbar';
 import Pokemon from '../components/Pokemon';
 import useAxios from '../hooks/useAxios';
 import { twStyles } from '../styles/styles';
-import { POKE_API } from '../utils/constants';
-import MultiSelect from '../components/MultiSelect';
+import { POKE_API, options } from '../utils/constants';
+import FilterOptions from '../components/FilterOptions';
+import { DataResultPokemon } from '../utils/Types';
+const url = `${POKE_API}pokemon?limit=10&offset=0`;
 
 function Home() {
-  const { status, data, error } = useAxios<any>(
-    `${POKE_API}pokemon?limit=10&offset=0`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const { status, data, error } = useAxios<any>(`${url}`, options);
 
   const [search, setSearch] = useState<string>('');
   const [pokemonStates, setPokemonStates] = useState<Record<string, boolean>>(
@@ -42,50 +36,32 @@ function Home() {
     return <p>{error?.message || 'An error occurred'}</p>;
   }
 
-  let filteredPokemon = data?.results || [];
+  let filteredPokemon: DataResultPokemon[] | [] = data?.results || [];
 
   if (showOnlyCaught) {
     filteredPokemon = filteredPokemon.filter(
-      (pokemon: any) => pokemonStates[pokemon.name]
+      (pokemon: DataResultPokemon) => pokemonStates[pokemon.name]
     );
   }
 
   if (search.length > 0) {
     const searchLower = search.toLowerCase();
-    filteredPokemon = filteredPokemon.filter((pokemon: any) =>
+    filteredPokemon = filteredPokemon.filter((pokemon: DataResultPokemon) =>
       pokemon.name.includes(searchLower)
     );
   }
 
   return (
-    <div>
+    <div className="">
       <Navbar />
       <main className={`${twStyles.flexCenter}  sm:h-screen max-sm:flex-col`}>
         <div className="flex flex-col gap-5 mr-14 max-sm:mr-0">
-          <div className="flex flex-col">
-            <label
-              htmlFor="search"
-              className="text-lg font-medium text-gray-700"
-            >
-              Filters
-            </label>
-            <input
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border-b border-gray-500 py-2 pr-8 pl-4  focus:outline-none focus:border-blue-500"
-            />
-          </div>
-          <MultiSelect
-            onChange={(selected: string[] | []) => setSelectedTypes(selected)}
+          <FilterOptions
+            search={search}
+            setSearch={setSearch}
+            setSelectedTypes={setSelectedTypes}
+            handleShowOnlyCaughtChange={handleShowOnlyCaughtChange}
           />
-          <div>
-            <input
-              type="checkbox"
-              onChange={(e) => handleShowOnlyCaughtChange(e)}
-            />
-            <span>Show only caught Pokemon</span>
-          </div>
         </div>
         <div className="flex flex-col gap-5 max-sm:bg-blue-100 max-sm:max-w-xs">
           <div className="flex gap-5 max-sm:flex-row max-sm:justify-between max-sm:items-center">
@@ -93,8 +69,8 @@ function Home() {
             <span className="max-sm:w-1/3">Type</span>
             <span className="max-sm:w-1/3">Status</span>
           </div>
-          <div className="flex gap-4 flex-col max-w-full">
-            {filteredPokemon.map((pokemon: any, i: Key) => {
+          <div className="flex gap-4 flex-col max-w-full overflow-y-auto max-h-96">
+            {filteredPokemon.map((pokemon: DataResultPokemon, i: Key) => {
               return (
                 <Pokemon
                   name={pokemon.name}

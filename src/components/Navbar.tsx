@@ -1,6 +1,3 @@
-import React from 'react';
-import logo from './logo.png';
-
 function Navbar() {
   return (
     <nav className="flex items-center justify-between flex-wrap bg-red-500 p-6">

@@ -9,8 +9,6 @@ function PokemonProfile(props: Props) {
   const location = useLocation();
   const { name, weight, height, imageUrl, abilities, caught } = location.state;
 
-  console.log(abilities);
-
   return (
     <div>
       <div className="flex justify-center items-center flex-row h-screen max-sm:flex-col">

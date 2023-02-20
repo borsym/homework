@@ -72,7 +72,7 @@ function Pokemon(props: Props) {
         <div
           className={`${
             !caught ? 'border-blue-500' : 'border-yellow-400'
-          } border-2 min-w-[300px] max-sm:min-w-[200px] flex justify-between items-center p-3 rounded-lg`}
+          } border-2 min-w-[300px] max-sm:min-w-[200px] flex justify-between items-center p-3 rounded-lg cursor-pointer`}
           onClick={() =>
             handleSelectPokemon(
               name,
@@ -87,7 +87,10 @@ function Pokemon(props: Props) {
           <span className="max-sm:text-xs">{capitalizeFirstLetter(name)}</span>
           <span className="max-sm:text-xs">
             {data?.types.map((type: any, i: Key) => (
-              <span key={i}>{capitalizeFirstLetter(type.type.name)} </span>
+              <span className="max-sm:text-xs" key={i}>
+                {capitalizeFirstLetter(type.type.name)}
+                {i < data.types.length - 1 && ', '}
+              </span>
             ))}
           </span>
           <span className="max-sm:text-xs">{!caught ? '-' : 'Caught'}</span>
