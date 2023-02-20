@@ -1,13 +1,13 @@
 import React, { Key, useState } from 'react';
 import Button from './Button';
 import { twStyles } from '../styles/styles';
-import useAxios from '../hooks/useAxios';
 import { capitalizeFirstLetter } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
-import { OPTIONS } from '../utils/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { catchPokemon, releasePokemon } from '../features/pokemon/pokemonSlice';
 import { PokemonType } from '../utils/Types';
+import { useGetPokemonByNameQuery } from '../services/pokemonAPI';
+import { RenderLoadingError } from './RenderLoadingError';
 
 type Props = {
   url: string;
@@ -16,9 +16,9 @@ type Props = {
 };
 
 function Pokemon(props: Props) {
-  const { url, name, selectedTypes } = props;
+  const { name, selectedTypes } = props;
   const pokemons = useAppSelector((state) => state.pokemon.pokemons);
-  const { status, data, error } = useAxios<any>(`${url}`, OPTIONS);
+  const { data, error, isLoading } = useGetPokemonByNameQuery(name);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const caught = pokemons[name] || false;
@@ -49,13 +49,14 @@ function Pokemon(props: Props) {
     });
   };
 
-  if (status === 'loading' || !data) {
-    return <p>Loading...</p>;
-  }
+  // if (status === 'loading' || !data) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (status === 'error') {
-    return <p>{error?.message || 'An error occurred'}</p>;
-  }
+  // if (status === 'error') {
+  //   return <p>{error?.message || 'An error occurred'}</p>;
+  // }
+  if (isLoading) return <p>Loading...</p>;
 
   if (selectedTypes.length > 0) {
     const types = data?.types.map((type: PokemonType) => type.type.name);
@@ -67,7 +68,7 @@ function Pokemon(props: Props) {
 
   const { sprites, weight, height, abilities } = data;
   return (
-    <>
+    <RenderLoadingError error={error} data={data} loading={isLoading}>
       <div className="flex gap-8 justify-center items-center">
         <div
           className={`${
@@ -104,7 +105,7 @@ function Pokemon(props: Props) {
           />
         </div>
       </div>
-    </>
+    </RenderLoadingError>
   );
 }
 

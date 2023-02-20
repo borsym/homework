@@ -8,17 +8,14 @@ import FilterOptions from '../components/FilterOptions';
 import { DataResultPokemon, PokemonListResponse } from '../utils/Types';
 import { useAppSelector } from '../hooks/hooks';
 import { RenderLoadingError } from '../components/RenderLoadingError';
-const url = `${POKE_API}pokemon?limit=10&offset=0`;
+import { useGetPokemonsQuery } from '../services/pokemonAPI';
 
 /**Home component that displays a list of Pokemon with filter options
  * @function Home
  * @returns {JSX.Element} - The component's rendered content.
  */
 function Home() {
-  const { status, data, error } = useAxios<PokemonListResponse>(
-    `${url}`,
-    OPTIONS
-  );
+  const { data, error, isLoading } = useGetPokemonsQuery(10);
 
   const search = useAppSelector((state) => state.filters.search);
   const showOnlyCaught = useAppSelector(
@@ -43,7 +40,7 @@ function Home() {
   }
 
   return (
-    <RenderLoadingError status={status} data={data} error={error}>
+    <RenderLoadingError loading={isLoading} data={data} error={error}>
       <div className="">
         <Navbar />
         <main className={`${twStyles.flexCenter}  sm:h-screen max-sm:flex-col`}>

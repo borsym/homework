@@ -5,3 +5,5 @@ export const OPTIONS = {
     'Content-Type': 'application/json',
   },
 };
+
+// pokemon?limit=10&offset=0

@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import Select, { ValueType } from 'react-select';
-import useAxios from '../hooks/useAxios';
-import { POKE_API } from '../utils/constants';
 import { capitalizeFirstLetter } from '../utils/utils';
-import {
-  DataResultPokemon,
-  PokemonListResponse,
-  PokemonOption,
-} from '../utils/Types';
+import { DataResultPokemon, PokemonOption } from '../utils/Types';
 import { RenderLoadingError } from './RenderLoadingError';
+import { useGetTypesQuery } from '../services/pokemonAPI';
 
 const customStyles = {
   option: (provided: any, state: any) => ({
@@ -42,15 +37,7 @@ interface Props {
 }
 
 const MultiSelect: React.FC<Props> = ({ onChange }) => {
-  const { status, data, error } = useAxios<PokemonListResponse>(
-    `${POKE_API}type`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const { data, error, isLoading } = useGetTypesQuery(undefined);
 
   const [selectedOptions, setSelectedOptions] = useState<
     ValueType<PokemonOption>
@@ -64,23 +51,14 @@ const MultiSelect: React.FC<Props> = ({ onChange }) => {
     onChange(selectedValues || []);
   };
 
-  if (status === 'loading' || !data) {
-    return <p>Loading...</p>;
-  }
-
-  if (status === 'error') {
-    return <p>{error?.message || 'An error occurred'}</p>;
-  }
-
   let options: DataResultPokemon[] | PokemonOption[] = data?.results || [];
-
   options = options.map((option) => ({
     value: option.name,
     label: capitalizeFirstLetter(option.name),
   }));
 
   return (
-    <RenderLoadingError status={status} data={data} error={error}>
+    <RenderLoadingError loading={isLoading} data={data} error={error}>
       <div className="max-w-[300px]">
         <label htmlFor="type">Pokemon Types</label>
         <Select
