@@ -13,7 +13,7 @@ function PokemonProfile(props: Props) {
 
   return (
     <div>
-      <div className="flex justify-center items-center flex-row h-screen">
+      <div className="flex justify-center items-center flex-row h-screen max-sm:flex-col">
         <div className="flex flex-col">
           <Button
             label="Back to search"
@@ -33,8 +33,7 @@ function PokemonProfile(props: Props) {
           </div>
         </div>
         <div>
-          <h2 className="text-2xl font-bold mb-2">{name}</h2>
-          <table className="table-auto">
+          <table className="table-auto mt-4">
             <tbody>
               <tr className="bg-blue-200">
                 <td className="font-semibold p-2">Name</td>
@@ -67,7 +66,9 @@ function PokemonProfile(props: Props) {
               label={`${!caught ? 'Catch' : 'Release'}`}
               onClick={() => {}}
               disabled={true}
-              className={`${!caught ? twStyles.btn : twStyles.btnRelease}`}
+              className={`${
+                !caught ? twStyles.btn : twStyles.btnRelease
+              } max-sm:min-w-full`}
             />
           </div>
         </div>
