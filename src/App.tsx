@@ -1,9 +1,6 @@
 import { Key, useState } from 'react';
-import Button from './components/Button';
-import DropDownTypes from './components/MultiSelect';
 import Navbar from './components/Navbar';
 import Pokemon from './components/Pokemon';
-import { CounterProvider, useCounter } from './context/Counter';
 import useAxios from './hooks/useAxios';
 import { twStyles } from './styles/styles';
 import { POKE_API } from './utils/constants';
@@ -21,9 +18,9 @@ function App() {
   );
 
   const [search, setSearch] = useState<string>('');
-  const [pokemonStates, setPokemonStates] = useState<{
-    [name: string]: boolean;
-  }>({});
+  const [pokemonStates, setPokemonStates] = useState<Record<string, boolean>>(
+    {}
+  );
   const [showOnlyCaught, setShowOnlyCaught] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
@@ -54,8 +51,9 @@ function App() {
   }
 
   if (search.length > 0) {
+    const searchLower = search.toLowerCase();
     filteredPokemon = filteredPokemon.filter((pokemon: any) =>
-      pokemon.name.includes(search)
+      pokemon.name.includes(searchLower)
     );
   }
 
@@ -106,6 +104,7 @@ function App() {
                   onCaughtChange={(caught: boolean) =>
                     handleCaughtChange(pokemon.name, caught)
                   }
+                  selectedTypes={selectedTypes}
                 />
               );
             })}

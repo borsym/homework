@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import Select, { ValueType } from 'react-select';
 import useAxios from '../hooks/useAxios';
 import { POKE_API } from '../utils/constants';
-import { capitalizeFirstLetter } from '../utils/helperFunctions';
-
-// const options = [
-//   { value: 'apple', label: 'Apple' },
-//   { value: 'banana', label: 'Banana' },
-//   { value: 'orange', label: 'Orange' },
-//   { value: 'grape', label: 'Grape' },
-// ];
+import { capitalizeFirstLetter } from '../utils/utils';
 
 const customStyles = {
   option: (provided: any, state: any) => ({

@@ -2,17 +2,18 @@ import React, { Key } from 'react';
 import Button from './Button';
 import { twStyles } from '../styles/styles';
 import useAxios from '../hooks/useAxios';
-import { capitalizeFirstLetter } from '../utils/helperFunctions';
+import { capitalizeFirstLetter } from '../utils/utils';
 
 type Props = {
   url: String;
   name: String;
   caught: boolean;
   onCaughtChange: (caught: boolean) => void;
+  selectedTypes: string[];
 };
 
 function Pokemon(props: Props) {
-  const { url, name, caught, onCaughtChange } = props;
+  const { url, name, caught, onCaughtChange, selectedTypes } = props;
   const { status, data, error } = useAxios<any>(`${url}`, {
     method: 'GET',
     headers: {
@@ -30,6 +31,14 @@ function Pokemon(props: Props) {
 
   if (status === 'error') {
     return <p>{error?.message || 'An error occurred'}</p>;
+  }
+
+  if (selectedTypes.length > 0) {
+    const types = data?.types.map((type: any) => type.type.name);
+    const hasSelectedType = selectedTypes.some((type) => types?.includes(type));
+    if (!hasSelectedType) {
+      return null;
+    }
   }
 
   return (
