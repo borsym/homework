@@ -25,7 +25,7 @@ function App() {
     [name: string]: boolean;
   }>({});
   const [showOnlyCaught, setShowOnlyCaught] = useState(false);
-  // const []
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const handleShowOnlyCaughtChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -78,7 +78,9 @@ function App() {
               className="border-b border-gray-500 py-2 pr-8 pl-4  focus:outline-none focus:border-blue-500"
             />
           </div>
-          <MultiSelect />
+          <MultiSelect
+            onChange={(selected: string[] | []) => setSelectedTypes(selected)}
+          />
           <div>
             <input
               type="checkbox"

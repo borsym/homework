@@ -82,6 +82,7 @@ const MultiSelect: React.FC<Props> = ({ onChange }) => {
 
   return (
     <div className="max-w-[300px]">
+      <label htmlFor="type">Pokemon Types</label>
       <Select
         isMulti
         options={options}
