@@ -53,7 +53,7 @@ function App() {
             <span>Type</span>
             <span>Status</span>
           </div>
-          <div>
+          <div className="flex gap-4 flex-col">
             {data?.results.map((pokemon: any, i: Key) => (
               <Pokemon name={pokemon.name} url={pokemon.url} key={i} />
             ))}

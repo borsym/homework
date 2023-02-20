@@ -18,7 +18,6 @@ function Pokemon(props: Props) {
     },
   });
 
-  // create a state that storts a string
   const [caught, setCaught] = useState(false);
 
   if (status === 'loading') {
@@ -29,22 +28,25 @@ function Pokemon(props: Props) {
     return <p>{error?.message || 'An error occurred'}</p>;
   }
 
-  console.log(data?.types);
   return (
-    <div className="flex gap-3 justify-center items-center">
-      <div className="border-blue-500 border-2 min-w-[300px] flex justify-between items-center p-3">
-        <span className="flex-1">{capitalizeFirstLetter(name)}</span>
+    <div className="flex gap-8 justify-center items-center">
+      <div
+        className={`${
+          !caught ? 'border-blue-500' : 'border-yellow-400'
+        } border-2 min-w-[300px] flex justify-between items-center p-3 rounded-lg`}
+      >
+        <span className="">{capitalizeFirstLetter(name)}</span>
         <span className="">
           {data?.types.map((type: any, i: Key) => (
             <span key={i}>{capitalizeFirstLetter(type.type.name)} </span>
           ))}
         </span>
-        <span className="flex-1">{status}</span>
+        <span className="">{!caught ? '-' : 'Caught'}</span>
       </div>
       <div>
         <Button
           label={`${!caught ? 'Catch' : 'Release'}`}
-          onClick={() => {}}
+          onClick={() => setCaught(!caught)}
           className={`${!caught ? twStyles.btn : twStyles.btnRelease}`}
         />
       </div>
