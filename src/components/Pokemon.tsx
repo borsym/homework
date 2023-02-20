@@ -3,7 +3,7 @@ import Button from './Button';
 import { twStyles } from '../styles/styles';
 import useAxios from '../hooks/useAxios';
 import { capitalizeFirstLetter } from '../utils/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   url: string;
@@ -66,14 +66,13 @@ function Pokemon(props: Props) {
   }
 
   const { sprites, weight, height, abilities } = data;
-  console.log(weight);
   return (
     <>
       <div className="flex gap-8 justify-center items-center">
         <div
           className={`${
             !caught ? 'border-blue-500' : 'border-yellow-400'
-          } border-2 min-w-[300px] flex justify-between items-center p-3 rounded-lg`}
+          } border-2 min-w-[300px] max-sm:min-w-[200px] flex justify-between items-center p-3 rounded-lg`}
           onClick={() =>
             handleSelectPokemon(
               name,
@@ -85,19 +84,21 @@ function Pokemon(props: Props) {
             )
           }
         >
-          <span className="">{capitalizeFirstLetter(name)}</span>
-          <span className="">
+          <span className="max-sm:text-xs">{capitalizeFirstLetter(name)}</span>
+          <span className="max-sm:text-xs">
             {data?.types.map((type: any, i: Key) => (
               <span key={i}>{capitalizeFirstLetter(type.type.name)} </span>
             ))}
           </span>
-          <span className="">{!caught ? '-' : 'Caught'}</span>
+          <span className="max-sm:text-xs">{!caught ? '-' : 'Caught'}</span>
         </div>
         <div>
           <Button
             label={`${!caught ? 'Catch' : 'Release'}`}
             onClick={() => handleCaughtChange(!caught)}
-            className={`${!caught ? twStyles.btn : twStyles.btnRelease}`}
+            className={`${
+              !caught ? twStyles.btn : twStyles.btnRelease
+            } max-sm:text-xs`}
           />
         </div>
       </div>

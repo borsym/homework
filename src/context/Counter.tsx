@@ -1,3 +1,5 @@
+// todo
+
 import React, { createContext, useContext, useReducer } from 'react';
 
 // Define the interface for the counter state
@@ -34,9 +36,10 @@ function counterReducer(
 }
 
 // Create the CounterContext
-const CounterContext = createContext<
-  { state: CounterState; actions: CounterActions } | null
->(null);
+const CounterContext = createContext<{
+  state: CounterState;
+  actions: CounterActions;
+} | null>(null);
 
 // Define a custom hook to make it easier to use the CounterContext
 function useCounter(): { state: CounterState; actions: CounterActions } {

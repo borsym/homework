@@ -4,11 +4,8 @@ import logo from './logo.png';
 function Navbar() {
   return (
     <nav className="flex items-center justify-between flex-wrap bg-red-500 p-6">
-      <div className="flex items-center flex-shrink-0 text-white">
-        {/* <img src={logo} alt="Logo" className="h-8 w-8 mr-2" /> */}
-        Pokemon
-      </div>
-      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div className="flex items-center flex-shrink-0 text-white">Pokemon</div>
+      <div className="w-full block lg:w-auto lg:flex lg:items-center lg:justify-end">
         <div className="text-sm lg:flex-grow">
           <a
             href="#pokeapi"

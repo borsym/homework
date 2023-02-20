@@ -60,8 +60,8 @@ function Home() {
   return (
     <div>
       <Navbar />
-      <main className={`${twStyles.flexCenter}  h-screen`}>
-        <div className="flex flex-col gap-5 mr-14">
+      <main className={`${twStyles.flexCenter}  sm:h-screen max-sm:flex-col`}>
+        <div className="flex flex-col gap-5 mr-14 max-sm:mr-0">
           <div className="flex flex-col">
             <label
               htmlFor="search"
@@ -87,13 +87,13 @@ function Home() {
             <span>Show only caught Pokemon</span>
           </div>
         </div>
-        <div className="flex flex-col gap-5">
-          <div className="flex gap-5">
-            <span>Name</span>
-            <span>Type</span>
-            <span>Status</span>
+        <div className="flex flex-col gap-5 max-sm:bg-blue-100 max-sm:max-w-xs">
+          <div className="flex gap-5 max-sm:flex-row max-sm:justify-between max-sm:items-center">
+            <span className="max-sm:w-1/3">Name</span>
+            <span className="max-sm:w-1/3">Type</span>
+            <span className="max-sm:w-1/3">Status</span>
           </div>
-          <div className="flex gap-4 flex-col">
+          <div className="flex gap-4 flex-col max-w-full">
             {filteredPokemon.map((pokemon: any, i: Key) => {
               return (
                 <Pokemon
