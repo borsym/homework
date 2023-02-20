@@ -8,7 +8,7 @@ import { RootState } from '../app/store';
 
 type Props = {};
 
-function PokemonProfile(props: Props) {
+function PokemonProfile() {
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ function PokemonProfile(props: Props) {
                 <td className="font-semibold p-2">Abilities</td>
                 <td className="p-2">
                   <ul className="list-disc">
-                  {abilities.map((el: any, index: Key) => (
+                    {abilities.map((el: any, index: Key) => (
                       <li key={index} className="">
                         {el.ability.name}
                       </li>

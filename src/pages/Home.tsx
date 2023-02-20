@@ -1,9 +1,7 @@
 import { Key, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Pokemon from '../components/Pokemon';
-import useAxios from '../hooks/useAxios';
 import { twStyles } from '../styles/styles';
-import { POKE_API, OPTIONS } from '../utils/constants';
 import FilterOptions from '../components/FilterOptions';
 import { DataResultPokemon, PokemonListResponse } from '../utils/Types';
 import { useAppSelector } from '../hooks/hooks';

@@ -1,4 +1,4 @@
-import React, { Key, useState } from 'react';
+import { Key } from 'react';
 import Button from './Button';
 import { twStyles } from '../styles/styles';
 import { capitalizeFirstLetter } from '../utils/utils';
@@ -48,15 +48,6 @@ function Pokemon(props: Props) {
       },
     });
   };
-
-  // if (status === 'loading' || !data) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (status === 'error') {
-  //   return <p>{error?.message || 'An error occurred'}</p>;
-  // }
-  if (isLoading) return <p>Loading...</p>;
 
   if (selectedTypes.length > 0) {
     const types = data?.types.map((type: PokemonType) => type.type.name);
